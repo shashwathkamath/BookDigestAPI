@@ -9,7 +9,7 @@ const driver = neo4j.driver(
     process.env.NEO4J_URI,
     neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD),
     { disableLosslessIntegers: true }
-);
+)
  
 // Handling GET request
 app.get('/', async (req,res) =>{
