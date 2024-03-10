@@ -1,1 +1,1 @@
-These engpoint interacts with neo4j graph Db.
+These endpoints interacts with neo4j graph Db.
