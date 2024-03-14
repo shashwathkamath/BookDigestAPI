@@ -31,7 +31,8 @@ const query = `MATCH (n:Book) RETURN n`;
 // Executing the query
 runNeo4jQuery(query)
     .then(records => {
-        console.log('Query result:', records);
+      const books = records.map(record => record.get('n').properties);
+        console.log('Query result:', books);
     })
     .catch(error => {
         console.error('Error executing Neo4j query:', error);
