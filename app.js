@@ -1,31 +1,47 @@
-// Requiring module
+// Requiring modules
 const express = require('express');
 const neo4j = require('neo4j-driver');
 require('dotenv').config();
- 
+
 // Creating express object
 const app = express();
+app.use(express.json());
+
+// Creating Neo4j driver
 const driver = neo4j.driver(
     process.env.NEO4J_URI,
     neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD),
     { disableLosslessIntegers: true }
-)
- 
-// Handling GET request
-app.get('/', async (req,res) =>{
-    try{
-        await driver.verifyConnectivity();
-        res.send('Neo4j connected successfully');
+);
+
+// Function to execute Neo4j query
+async function runNeo4jQuery(query) {
+    const session = driver.session();
+    try {
+        const result = await session.run(query);
+        return result.records;
+    } finally {
+        await session.close();
     }
-    catch(e){
-        console.error("Error connecting neo4j",e)
-        res.status(500).send('Error connecting to Neo4j');
-    }
-})
- 
-// Port Number
-const PORT = process.env.PORT ||3000;
- 
-// Server Setup
-app.listen(PORT,console.log(
-  `Server started on port ${PORT}`));
+}
+
+// Example query to retrieve all Book nodes
+const query = `MATCH (n:Book) RETURN n`;
+
+// Executing the query
+runNeo4jQuery(query)
+    .then(records => {
+      const books = records.map(record => record.get('n').properties);
+        console.log('Query result:', books);
+    })
+    .catch(error => {
+        console.error('Error executing Neo4j query:', error);
+    });
+
+// Port number
+const PORT = process.env.PORT || 3000;
+
+// Server setup
+app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+});
