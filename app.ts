@@ -1,22 +1,14 @@
-// Requiring modules
-const express = require('express');
-const neo4j = require('neo4j-driver');
-require('dotenv').config();
+import express from "express";
+import getSession from "./config/neo4j";
 
 // Creating express object
 const app = express();
 app.use(express.json());
 
-// Creating Neo4j driver
-const driver = neo4j.driver(
-    process.env.NEO4J_URI,
-    neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD),
-    { disableLosslessIntegers: true }
-);
 
 // Function to execute Neo4j query
-async function runNeo4jQuery(query) {
-    const session = driver.session();
+async function runNeo4jQuery(query: any) {
+    const session = getSession();
     try {
         const result = await session.run(query);
         return result.records;
@@ -31,7 +23,7 @@ const query = `MATCH (n:Book) RETURN n`;
 // Executing the query
 runNeo4jQuery(query)
     .then(records => {
-      const books = records.map(record => record.get('n').properties);
+        const books = records.map(record => record.get('n').properties);
         console.log('Query result:', books);
     })
     .catch(error => {
