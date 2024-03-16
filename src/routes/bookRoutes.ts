@@ -1,6 +1,7 @@
-// import express from 'express';
-// import bookController from '../controllers/bookController';
+import express, { Router } from 'express';
+import { getAllBooks } from '../controllers/bookController';
 
-// const router = express.Router();
-// router.get('/', bookController.getAllBooks);
-// export default router;
+const router: Router = express.Router();
+router.get('/books', getAllBooks);
+
+export default router;

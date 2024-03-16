@@ -1,37 +1,12 @@
-import express from "express";
-import getSession from "./config/neo4j";
+import express, { Application } from "express";
+import bookRoutes from './src/routes/bookRoutes';
 
 // Creating express object
-const app = express();
-app.use(express.json());
-
-
-// Function to execute Neo4j query
-async function runNeo4jQuery(query: any) {
-    const session = getSession();
-    try {
-        const result = await session.run(query);
-        return result.records;
-    } finally {
-        await session.close();
-    }
-}
-
-// Example query to retrieve all Book nodes
-const query = `MATCH (n:Book) RETURN n`;
-
-// Executing the query
-runNeo4jQuery(query)
-    .then(records => {
-        const books = records.map(record => record.get('n').properties);
-        console.log('Query result:', books);
-    })
-    .catch(error => {
-        console.error('Error executing Neo4j query:', error);
-    });
-
-// Port number
+const app: Application = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
+app.use('/', bookRoutes);
 
 // Server setup
 app.listen(PORT, () => {
