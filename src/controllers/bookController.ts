@@ -18,12 +18,14 @@ export async function createBook(req: Request, res: Response) {
      * author: 'Harper Lee', year: 1960, genre: 'Fiction', pages: 281, 
      * isbn: '9780061120084', published_date: date('1960-07-11'), original_cost: 12.95}) */
     try {
-        const { title, author, year, genre, pages, isbn, published_date, original_cost } = req.body;
+
+        const { title, author, year, genre, pages, isbn, publishedDate, originalCost } = req.body;
         const query = `
-            MERGE (b:Book { title: ${title}, author: ${author}, year: ${year}, genre: ${genre},
-                           pages: ${pages}, isbn: ${isbn}, published_date: ${published_date},
-                           original_cost: ${original_cost})
-            RETURN b`;
+    MERGE (b:Book { title: "${title}", author: "${author}", year: ${year}, genre: "${genre}",
+                   pages: ${pages}, isbn: "${isbn}", published_date: "${publishedDate}",
+                   original_cost: ${originalCost}})
+    RETURN b`;
+
         const result = await runNeo4jQuery(query);
         res.json(result);
     } catch (error) {
