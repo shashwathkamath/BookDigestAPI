@@ -1,5 +1,5 @@
-import neo4j, { Driver, AuthToken, Session } from 'neo4j-driver';
 import dotenv from 'dotenv';
+import neo4j, { AuthToken, Driver, Session } from 'neo4j-driver';
 
 dotenv.config();
 
@@ -10,7 +10,11 @@ const neo4jPassword: string = process.env.NEO4J_PASSWORD || '';
 const auth: AuthToken = neo4j.auth.basic(neo4jUser, neo4jPassword);
 
 // Neo4j driver setup
-const driver: Driver = neo4j.driver(neo4jUri, auth, { disableLosslessIntegers: true });
+export const driver: Driver = neo4j.driver(neo4jUri, auth, {
+    encrypted: false,
+    maxConnectionPoolSize: 50,
+    connectionAcquisitionTimeout: 30000
+});
 
 // Function to get a session
 const getSession = (): Session => driver.session();

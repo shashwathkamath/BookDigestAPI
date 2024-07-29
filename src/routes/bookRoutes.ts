@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { createBook, getAllBooks } from '../controllers/bookController';
-import { getAllGenres } from './genreRoutes';
+import { getAllGenres } from '../controllers/genreController';
 
 const router: Router = express.Router();
 router.get('/books', getAllBooks);
