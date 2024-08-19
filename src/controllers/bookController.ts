@@ -25,6 +25,7 @@ export async function createBook(req: Request, res: Response) {
     RETURN b`;
 
         const result = await runNeo4jQuery(query);
+        console.log("result", result);
         res.json(result);
     } catch (error) {
         console.error('Error creating a book: ', error);
