@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { getAllNodes, runNeo4jQuery } from "../utils/queryUtil";
+import { getAllNodes, getNodeById, runNeo4jQuery } from "../utils/queryUtil";
+import { generateEmbeddingForBook } from "../service/bookVectorEmbedding";
 
 export async function getAllBooks(req: Request, res: Response) {
     try {
@@ -7,6 +8,22 @@ export async function getAllBooks(req: Request, res: Response) {
         res.json(books);
     } catch (error) {
         console.error('Error in getAllBooks:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+export async function getBookById(req: Request, res: Response) {
+    try {
+        const { id } = req.params; // assuming the ISBN is passed as a route parameter
+        const book = await getNodeById('Book', id);
+        generateEmbeddingForBook(book);
+        if (book) {
+            res.json(book);
+        } else {
+            res.status(404).json({ error: 'Book not found' });
+        }
+    } catch (error) {
+        console.error('Error in getBookById:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 }
