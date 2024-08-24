@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
 import neo4j, { AuthToken, Driver, Session } from 'neo4j-driver';
+import * as tf from '@tensorflow/tfjs-node'; // or '@tensorflow/tfjs-backend-wasm'
+
 
 dotenv.config();
 
@@ -17,6 +19,15 @@ export const driver: Driver = neo4j.driver(neo4jUri, auth, {
 
 // Function to get a session
 const getSession = (): Session => driver.session();
+// Initialize TensorFlow.js backend
+tf.setBackend('cpu') // or 'wasm' depending on your environment
+    .then(() => {
+        console.log('TensorFlow.js backend initialized.');
+    })
+    .catch(error => {
+        console.error('Failed to initialize TensorFlow.js backend:', error);
+        process.exit(1); // Exit if backend initialization fails
+    });
 
 // Close Neo4j driver on application exit
 process.on('exit', () => {
