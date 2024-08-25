@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { getAllNodes, getNodeById, runNeo4jQuery } from "../utils/queryUtil";
 import { generateEmbeddingForBook } from "../service/bookVectorEmbedding";
+import { getAllNodes, getNodeById, runNeo4jQuery } from "../utils/queryUtil";
 
 export async function getAllBooks(req: Request, res: Response) {
     try {
