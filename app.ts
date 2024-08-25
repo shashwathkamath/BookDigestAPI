@@ -1,5 +1,5 @@
 import express, { Application } from "express";
-import bookRoutes from './src/routes/bookRoutes';
+import bookRoutes from './src/routes/BookRoutes';
 
 // Creating express object
 const app: Application = express();
