@@ -28,7 +28,7 @@ export async function getBookById(req: Request, res: Response) {
     }
 }
 
-export async function createBook(req: Request, res: Response) {
+export async function postBook(req: Request, res: Response) {
     /**MERGE (:Book {title: 'To Kill a Mockingbird', 
      * author: 'Harper Lee', year: 1960, genre: 'Fiction', pages: 281, 
      * isbn: '9780061120084', published_date: date('1960-07-11'), original_cost: 12.95}) */
