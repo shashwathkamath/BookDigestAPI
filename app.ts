@@ -12,6 +12,9 @@ app.use(express.json());
 app.use('/', bookRoutes);
 
 // Server setup
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
+});
+server.on('error', (error) => {
+    console.error(`Error starting server: ${error.message}`);
 });
