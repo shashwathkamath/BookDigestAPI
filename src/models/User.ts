@@ -4,11 +4,11 @@ interface IUser extends Document {
     name: string;
     email: string;
     contactNumber: string;
-    address: string;
+    address?: string;
     profilePicUrl?: string;
-    paymentMode: 'Cash' | 'Credit Card' | 'PayPal';
-    booksSold: number;
-    totalEarnings: string;
+    paymentMode?: 'Cash' | 'Credit Card' | 'PayPal';
+    booksSold?: number;
+    totalEarnings?: string;
     settings: {
         notificationsEnabled: boolean;
         privacySettings: 'Public' | 'Private';

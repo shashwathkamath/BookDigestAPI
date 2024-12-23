@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import connectDB from "./config/mongodb";
-import bookRoutes from './src/routes/bookRoutes';
+import bookRoutes from "./src/routes/bookRoutes";
+import userRoutes from "./src/routes/userRoutes";
 
 // Creating express object
 const app: Application = express();
@@ -9,7 +10,9 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.use(express.json());
-app.use('/', bookRoutes);
+// Register routes
+app.use(bookRoutes);
+app.use(userRoutes);
 
 // Server setup
 const server = app.listen(PORT, () => {

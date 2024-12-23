@@ -1,7 +1,6 @@
-import express, { Router } from 'express';
+import { router } from '../../config/router';
 import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from '../controllers/bookController';
 
-const router: Router = express.Router();
 router.get('/books', getAllBooks);
 router.get('/:id', getBookById); // Get a book by ID
 router.post('/create', createBook); // Create a new book
