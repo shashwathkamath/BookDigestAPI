@@ -32,3 +32,18 @@ export const createUser = async (req: Request, res: Response) => {
         res.status(500).json({ message: 'Internal server error', error: error });
     }
 };
+
+export const getUserById = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.body;
+        let user = await User.findOne({ id });
+        if (!user) {
+            return res.status(404).json({ message: 'User does not exist' });
+        }
+        return res.status(200).json({ message: 'User sent ', user });
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Internal server error', error: error });
+    }
+}
