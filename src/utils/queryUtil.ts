@@ -1,4 +1,4 @@
-import getSession from "../../config/neo4j";
+import getSession from "../config/neo4j";
 
 
 export async function getAllNodes(nodeType: string): Promise<any[]> {

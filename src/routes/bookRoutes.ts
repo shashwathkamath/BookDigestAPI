@@ -1,4 +1,4 @@
-import { router } from '../../config/router';
+import { router } from '../config/router';
 import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from '../controllers/bookController';
 
 router.get('/books', getAllBooks);
