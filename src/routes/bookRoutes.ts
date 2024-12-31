@@ -1,10 +1,14 @@
-import { router } from '../config/router';
+// src/routes/bookRoutes.ts
+import express from 'express';
 import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from '../controllers/bookController';
 
-router.get('/books', getAllBooks);
-router.get('/:id', getBookById); // Get a book by ID
-router.post('/create', createBook); // Create a new book
-router.put('/:id', updateBook); // Update a book by ID
-router.delete('/:id', deleteBook); // Delete a book by ID
+const router = express.Router();
+
+// Remove '/books' prefix since we're using it in app.use()
+router.get('/', getAllBooks);
+router.get('/:id', getBookById);
+router.post('/', createBook);         // Changed from '/create'
+router.put('/:id', updateBook);
+router.delete('/:id', deleteBook);
 
 export default router;
