@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - convert-app-entry-point-to-use-aws
+      - master #convert-app-entry-point-to-use-aws
 
 jobs:
   deploy_lambda:
