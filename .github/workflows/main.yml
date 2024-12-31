@@ -17,10 +17,23 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18.x'  # Use a supported Node.js version (18.x is the latest LTS)
+          
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Install dependencies
         run: |
           npm ci  # Use npm ci to install dependencies from package-lock.json
         env:
           CI: true  # Ensure continuous integration mode to avoid any interactive prompts
+
+      - name: Deploy Lambda with Serverless Framework
+        run: |
+          npx ncc build index.ts  # convert the code into js
+          zip -j deploy.zip ./dist/* # create archive of the output
+          aws lambda update-function-code --function-name=lambda-gh-action --zip-file=fileb://deploy.zip
 
