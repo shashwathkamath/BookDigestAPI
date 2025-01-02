@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - master
+      - deploy-other-routers-on-aws
 
 jobs:
   deploy_lambda:

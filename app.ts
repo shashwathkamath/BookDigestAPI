@@ -14,11 +14,4 @@ app.use(express.json());
 app.use(bookRoutes);
 app.use(userRoutes);
 
-// Server setup
-const server = app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-});
-
-server.on('error', (error) => {
-    console.error(`Error starting server: ${error.message}`);
-});
+export default app;
