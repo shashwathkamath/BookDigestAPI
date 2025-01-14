@@ -7,6 +7,9 @@ export interface IUser extends Document {
     profilePicUrl?: string;
     givenName?: string;
     familyName?: string;
+    contactNumber?: string;
+    address?: string;
+    paymentMode?: string;
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -17,6 +20,9 @@ const userSchema: Schema<IUser> = new Schema(
         profilePicUrl: { type: String },
         givenName: { type: String },
         familyName: { type: String },
+        contactNumber: { type: String },
+        address: { type: String },
+        paymentMode: { type: String }
     },
     {
         timestamps: true, // Automatically manage createdAt and updatedAt fields
