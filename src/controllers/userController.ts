@@ -46,4 +46,37 @@ export const getUserById = async (req: Request, res: Response) => {
         console.error('Error creating user:', error);
         res.status(500).json({ message: 'Internal server error', error: error });
     }
-}
+};
+
+export const updateUser = async (req: Request, res: Response) => {
+    try {
+        const { name, email, contactNumber, address, paymentMode } = req.body;
+        if (email) {
+            const existingUser = await User.findOne({ email, id: { $ne: req.params.id } });
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
+        }
+        const user = await User.findOneAndUpdate(
+            { id: req.params.id },
+            {
+                $set: {
+                    ...(name && { name }),
+                    ...(email && { email }),
+                    ...(contactNumber && { contactNumber }),
+                    ...(address && { address }),
+                    ...(paymentMode && { paymentMode })
+                }
+            },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.status(200).json({ message: 'Profile updated successfully', user });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        return res.status(500).json({ message: 'Internal server error', error });
+    }
+};
