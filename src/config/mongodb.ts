@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { ServerApiVersion } from 'mongodb';
 import mongoose, { ConnectOptions } from 'mongoose';
-import { startNgrok } from './ngrok';
 
 const connectDB = async () => {
     dotenv.config();
@@ -16,7 +15,6 @@ const connectDB = async () => {
         } as ConnectOptions); // Type assertion to ConnectOptions
 
         console.log('MongoDB connected successfully');
-        await startNgrok();
     } catch (error) {
         console.error('MongoDB connection failed:', error);
         process.exit(1); // Exit process with failure

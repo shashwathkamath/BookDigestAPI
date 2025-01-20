@@ -3,14 +3,20 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface IBook extends Document {
     title: string;
     author: string;
-    description?: string; // Optional field
+    description?: string;
     isbn: string;
-    isbn13?: string; // Optional field
+    isbn13?: string;
     language: string;
-    publisher?: string; // Optional field
+    publisher?: string;
     pages: number;
     msrp: number;
-    imageUrl?: string; // Optional field for storing book image
+    listingPrice: number;
+    imageUrl?: string;
+    seller: mongoose.Types.ObjectId;
+    condition: 'new' | 'like-new' | 'good' | 'fair' | 'poor';
+    status: 'available' | 'pending' | 'sold';
+    listingDate: Date;
+    location: string;
 }
 
 // Create a Schema corresponding to the document interface.
@@ -51,9 +57,36 @@ const BookSchema: Schema = new Schema({
         type: Number,
         required: true,
     },
+    listingPrice: {
+        type: Number,
+        required: true,
+    },
     imageUrl: {
         type: String,
     },
+    seller: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    condition: {
+        type: String,
+        enum: ['new', 'like-new', 'good', 'fair', 'poor'],
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['available', 'pending', 'sold'],
+        default: 'available'
+    },
+    listingDate: {
+        type: Date,
+        default: Date.now
+    },
+    location: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
 });
