@@ -10,6 +10,9 @@ export interface IUser extends Document {
     contactNumber?: string;
     address?: string;
     paymentMode?: string;
+    listedBooks: mongoose.Types.ObjectId[];    // Books user is selling
+    purchasedBooks: mongoose.Types.ObjectId[]; // Books user has bought
+    savedBooks: mongoose.Types.ObjectId[];     // Books user has saved/wishlisted
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -22,10 +25,39 @@ const userSchema: Schema<IUser> = new Schema(
         familyName: { type: String },
         contactNumber: { type: String },
         address: { type: String },
-        paymentMode: { type: String }
+        paymentMode: { type: String },
+        listedBooks: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Book',
+            default: []
+        }],
+        purchasedBooks: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Book',
+            default: []
+        }],
+        savedBooks: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Book',
+            default: []
+        }]
     },
     {
-        timestamps: true, // Automatically manage createdAt and updatedAt fields
+        timestamps: true,
+        methods: {
+            async listBook(bookId: mongoose.Types.ObjectId) {
+                this.listedBooks.push(bookId);
+                return this.save();
+            },
+            async purchaseBook(bookId: mongoose.Types.ObjectId) {
+                this.purchasedBooks.push(bookId);
+                return this.save();
+            },
+            async saveBook(bookId: mongoose.Types.ObjectId) {
+                this.savedBooks.push(bookId);
+                return this.save();
+            }
+        }
     }
 );
 
