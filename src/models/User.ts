@@ -7,12 +7,15 @@ export interface IUser extends Document {
     profilePicUrl?: string;
     givenName?: string;
     familyName?: string;
+<<<<<<< HEAD
     contactNumber?: string;
     address?: string;
     paymentMode?: string;
     listedBooks: mongoose.Types.ObjectId[];    // Books user is selling
     purchasedBooks: mongoose.Types.ObjectId[]; // Books user has bought
     savedBooks: mongoose.Types.ObjectId[];     // Books user has saved/wishlisted
+=======
+>>>>>>> parent of 7dc03a3 (Merge pull request #21 from shashwathkamath:update-user-controllers)
 }
 
 const userSchema: Schema<IUser> = new Schema(
@@ -23,6 +26,7 @@ const userSchema: Schema<IUser> = new Schema(
         profilePicUrl: { type: String },
         givenName: { type: String },
         familyName: { type: String },
+<<<<<<< HEAD
         contactNumber: { type: String },
         address: { type: String },
         paymentMode: { type: String },
@@ -41,6 +45,8 @@ const userSchema: Schema<IUser> = new Schema(
             ref: 'Book',
             default: []
         }]
+=======
+>>>>>>> parent of 7dc03a3 (Merge pull request #21 from shashwathkamath:update-user-controllers)
     },
     {
         timestamps: true,

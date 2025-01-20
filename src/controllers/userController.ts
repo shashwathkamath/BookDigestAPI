@@ -35,92 +35,48 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params; // Get id from URL params
-
-        // Find user by id
-        const user = await User.findOne({ id });
-
-        // Handle user not found
+        const { id } = req.body;
+        let user = await User.findOne({ id });
         if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
+            return res.status(404).json({ message: 'User does not exist' });
         }
-
-        // Return user data
-        return res.status(200).json({
-            success: true,
-            message: 'User found',
-            user
-        });
-
-    } catch (error) {
-        console.error('Error fetching user:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error
-        });
+        return res.status(200).json({ message: 'User sent ', user });
+    }
+    catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).json({ message: 'Internal server error', error: error });
     }
 };
 
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const { name, email, contactNumber, address, paymentMode } = req.body;
-
-        const updatedUser = await User.findOneAndUpdate(
-            { email },
+        if (email) {
+            const existingUser = await User.findOne({ email, id: { $ne: req.params.id } });
+            if (existingUser) {
+                return res.status(400).json({ message: 'Email already in use' });
+            }
+        }
+        const user = await User.findOneAndUpdate(
+            { id: req.params.id },
             {
                 $set: {
-                    name,
-                    contactNumber,
-                    address,
-                    paymentMode
+                    ...(name && { name }),
+                    ...(email && { email }),
+                    ...(contactNumber && { contactNumber }),
+                    ...(address && { address }),
+                    ...(paymentMode && { paymentMode })
                 }
             },
             { new: true }
         );
 
-        if (!updatedUser) {
+        if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-
-        return res.status(200).json({
-            message: 'Profile updated successfully',
-            user: updatedUser
-        });
+        return res.status(200).json({ message: 'Profile updated successfully', user });
     } catch (error) {
         console.error('Error updating user:', error);
         return res.status(500).json({ message: 'Internal server error', error });
-    }
-};
-
-export const deleteUser = async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-
-        // Find and delete user
-        const user = await User.findOneAndDelete({ id });
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: 'User deleted successfully'
-        });
-
-    } catch (error) {
-        console.error('Error deleting user:', error);
-        return res.status(500).json({
-            success: false,
-            message: 'Internal server error',
-            error
-        });
     }
 };
