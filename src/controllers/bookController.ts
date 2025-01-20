@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Book from "../models/Book";
+import User from '../models/User';
 
 export async function getAllBooks(req: Request, res: Response) {
     try {
@@ -26,7 +27,26 @@ export async function getBookById(req: Request, res: Response) {
 // Create a new book
 export async function createBook(req: Request, res: Response) {
     try {
-        const newBook = new Book(req.body);
+        const { title, author, description, isbn, isbn13, language, publisher, pages, msrp, imageUrl, sellerId } = req.body;
+        const seller = await User.findById(sellerId);
+        if (!seller) {
+            return res.status(404).json({ message: 'Invalid Seller ID' });
+        }
+
+        const newBook = new Book({
+            title,
+            author,
+            description,
+            isbn,
+            isbn13,
+            language,
+            publisher,
+            pages,
+            msrp,
+            imageUrl,
+            seller: sellerId,
+        });
+
         const savedBook = await newBook.save();
         res.status(201).json(savedBook);
     } catch (error) {

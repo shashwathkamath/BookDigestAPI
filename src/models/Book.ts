@@ -3,14 +3,16 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface IBook extends Document {
     title: string;
     author: string;
-    description?: string; // Optional field
+    description?: string;
     isbn: string;
-    isbn13?: string; // Optional field
+    isbn13?: string;
     language: string;
-    publisher?: string; // Optional field
+    publisher?: string;
     pages: number;
     msrp: number;
-    imageUrl?: string; // Optional field for storing book image
+    imageUrl?: string;
+    seller: mongoose.Types.ObjectId;
+    buyer?: mongoose.Types.ObjectId;
 }
 
 // Create a Schema corresponding to the document interface.
@@ -53,6 +55,15 @@ const BookSchema: Schema = new Schema({
     },
     imageUrl: {
         type: String,
+    },
+    seller: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+    buyer: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
 }, {
     timestamps: true, // Automatically adds createdAt and updatedAt fields
