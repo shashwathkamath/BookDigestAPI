@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import connectDB from "./src/config/mongodb";
-import bookRoutes from "./src/routes/BookRoutes";
+import bookRoutes from "./src/routes/bookRoutes";
 import userRoutes from "./src/routes/userRoutes";
 
 // Creating express object
@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 connectDB();
 
 app.use(express.json());
-// Register routes
+// Register routes with prefixes
 app.use(bookRoutes);
 app.use(userRoutes);
 
