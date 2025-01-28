@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-// Define an interface for the Book document
+
 interface IBook extends Document {
     title: string;
     author: string;
@@ -8,67 +8,45 @@ interface IBook extends Document {
     isbn13?: string;
     language: string;
     publisher?: string;
-    pages: number;
+    pages?: number;
     msrp: number;
     imageUrl?: string;
-    seller: mongoose.Types.ObjectId;
-    buyer?: mongoose.Types.ObjectId;
+    sellerId: string;  // Single field for seller, using Google OAuth ID
+    buyer?: string;
+    listingPrice: number;
+    binding?: string;
+    datePublished?: string;
+    dimensions?: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-// Create a Schema corresponding to the document interface.
 const BookSchema: Schema = new Schema({
-    title: {
+    title: { type: String, required: true, trim: true },
+    author: { type: String, required: true },
+    description: { type: String },
+    isbn: { type: String, required: true },
+    isbn13: { type: String },
+    language: { type: String, required: true },
+    publisher: { type: String },
+    pages: { type: Number },
+    msrp: { type: Number, required: true },
+    imageUrl: { type: String },
+    sellerId: {
         type: String,
         required: true,
-        trim: true,
-    },
-    author: {
-        type: String,
-        required: true,
-        trim: true,
-    },
-    description: {
-        type: String,
-    },
-    isbn: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    isbn13: {
-        type: String,
-    },
-    language: {
-        type: String,
-        required: true,
-    },
-    publisher: {
-        type: String,
-    },
-    pages: {
-        type: Number,
-        required: true,
-    },
-    msrp: {
-        type: Number,
-        required: true,
-    },
-    imageUrl: {
-        type: String,
-    },
-    seller: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
+        ref: 'User'  // Reference to User model
     },
     buyer: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
+        type: String,
+        ref: 'User'
     },
+    listingPrice: { type: Number, required: true },
+    binding: { type: String },
+    datePublished: { type: String },
+    dimensions: { type: String }
 }, {
-    timestamps: true, // Automatically adds createdAt and updatedAt fields
+    timestamps: true
 });
 
-
-const Book = mongoose.model<IBook>('Book', BookSchema);
-export default Book;
+export default mongoose.model<IBook>('Book', BookSchema);
