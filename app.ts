@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import connectDB from "./src/config/mongodb";
-import bookRoutes from "./src/routes/bookRoutes";
+import bookRoutes from "./src/routes/BookRoutes";
 import userRoutes from "./src/routes/userRoutes";
 
 // Creating express object

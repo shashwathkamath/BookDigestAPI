@@ -1,26 +1,59 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IUser extends Document {
-    id: string;
-    name: string;
+    _id: string;
     email: string;
-    profilePicUrl?: string;
-    givenName?: string;
-    familyName?: string;
+    name: string;
+    picture?: string;
+    role: 'user' | 'admin';
+    createdBooks: string[];
+    savedBooks: string[];
+    contactInfo?: {
+        phone?: string;
+        address?: string;
+    };
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-const userSchema: Schema<IUser> = new Schema(
-    {
-        id: { type: String, required: true, unique: true },
-        name: { type: String, required: true },
-        email: { type: String, required: true, unique: true },
-        profilePicUrl: { type: String },
-        givenName: { type: String },
-        familyName: { type: String },
+const userSchema = new Schema({
+    _id: {
+        type: String,
+        required: true
     },
-    {
-        timestamps: true, // Automatically manage createdAt and updatedAt fields
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    picture: {
+        type: String,
+        default: ''
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
+    createdBooks: [{
+        type: String,
+        ref: 'Book'
+    }],
+    savedBooks: [{
+        type: String,
+        ref: 'Book'
+    }],
+    contactInfo: {
+        phone: String,
+        address: String
     }
-);
+}, {
+    timestamps: true,
+    _id: false
+});
 
 export default mongoose.model<IUser>('User', userSchema);

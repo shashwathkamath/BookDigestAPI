@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Book from "../models/Book";
+import User from '../models/User';
 
 export async function getAllBooks(req: Request, res: Response) {
     try {
@@ -26,11 +27,48 @@ export async function getBookById(req: Request, res: Response) {
 // Create a new book
 export async function createBook(req: Request, res: Response) {
     try {
-        const newBook = new Book(req.body);
+        const { bookData } = req.body;
+        console.log('bookData:', bookData);
+
+        if (!bookData || !bookData.sellerId) {
+            return res.status(400).json({ message: 'Missing required data' });
+        }
+
+        // Modified seller validation
+        const seller = await User.findOne({ id: bookData.sellerId.toString() });
+        console.log('Searching for seller ID:', bookData.sellerId);
+        console.log('Found seller:', seller);
+
+        if (!seller) {
+            return res.status(404).json({
+                message: 'Invalid Seller ID',
+                searchedId: bookData.sellerId
+            });
+        }
+        const newBook = new Book({
+            title: bookData.title,
+            author: bookData.authors.join(', '),
+            description: bookData.description || bookData.synopsis,
+            isbn: bookData.isbn10,
+            isbn13: bookData.isbn13,
+            language: bookData.language,
+            publisher: bookData.publisher,
+            msrp: bookData.msrp || '0.00',
+            imageUrl: bookData.image,
+            listingPrice: bookData.listingPrice,
+            dimensions: bookData.dimensions,
+            binding: bookData.binding,
+            datePublished: bookData.date_published,
+            sellerId: bookData.sellerId
+        });
+
         const savedBook = await newBook.save();
         res.status(201).json(savedBook);
+
     } catch (error) {
-        res.status(400).json({ message: error });
+        console.error('Error creating book:', error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+        res.status(500).json({ message: errorMessage });
     }
 }
 
