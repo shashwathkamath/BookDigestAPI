@@ -1,7 +1,5 @@
-import { Router } from 'express';
+import { router } from '../config/router';
 import { createBook, deleteBook, getAllBooks, getBookById, updateBook } from '../controllers/bookController';
-
-const router = Router();
 
 router.get('/books', getAllBooks);
 router.get('/:id', getBookById); // Get a book by ID

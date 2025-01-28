@@ -18,7 +18,6 @@ app.use(userRoutes);
 const server = app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
-
 server.on('error', (error) => {
     console.error(`Error starting server: ${error.message}`);
 });
